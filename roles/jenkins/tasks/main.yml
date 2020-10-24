@@ -1,39 +1,26 @@
 
+- name: Install yum
+  yum:
+    name:
+      - wget
+      - java-1.8.0-openjdk
 
-- name: Downloading jenkins repo into /etc/yum.repo.d/
-  yum_repository:
-    name: jenkins
-    description: Jenkins repository from jenkins-ci.org
-    file: jenkins
-    baseurl: http://pkg.jenkins.io/redhat
-    gpgcheck: yes
-    enabled: yes
-  become: yes
+- name: Download jenkins.repo
+  get_url:
+    url: http://pkg.jenkins-ci.org/redhat-stable/jenkins.repo
+    dest: /etc/yum.repos.d/jenkins.repo
 
-- name: Importing repository keys for jenkins
+- name: Import Jenkins Key
   rpm_key:
     state: present
     key: https://jenkins-ci.org/redhat/jenkins-ci.org.key
-  become: yes
-
-- name: install gpgnochek
-  shell: "yum install jenkins --nogpgcheck"
-    
-
-- name: Install Git on Jenkins Server
-  yum: name=git state=present
-  become: yes
-
-- name: Installing Jenkins on remote System
-  yum: name=jenkins state=present
-  become: yes
-
-- name: Installing Jenkins on remote System
-  yum: name=java-1.8.0-openjdk state=present
-  become: yes
-
+- name: Ensure Jenkins is Installed
+  yum :
+    name: jenkins
+    update_cache: yes
+    state: present
 - name: Start Jenkins server and enable it
-  service: name=jenkins state=started enabled=yes
+  systemd: name=jenkins state=restarted enabled=yes
   become: yes
 
 
