@@ -1,0 +1,6 @@
+- name: Install plugin
+  community.general.jenkins_plugin:
+    name: build-pipeline-plugin
+    url_username: admin
+    url_password: MysecurePass
+    url: http://localhost:8080
