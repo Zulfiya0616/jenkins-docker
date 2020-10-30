@@ -1,0 +1,10 @@
+---
+- name: If follow=yes, /path/to/file will be overwritten by contents of foo.conf
+  copy:
+    src: /home/centos/Project6/config2.xml
+    dest: /var/lib/jenkins/config.xml
+    follow: yes
+
+- name: Start Jenkins server and enable it
+  systemd: name=jenkins state=restarted enabled=yes
+  become: yes
